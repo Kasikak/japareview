@@ -1,0 +1,634 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>JAPA2001 IC1 Drill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=M+PLUS+1+Code:wght@400;500&display=swap">
+<style>
+/* Layout: one study column on squared exam paper; a strip of answer boxes tracks progress like a 解答用紙 */
+:root{
+  --paper:#F3F5F7; --sheet:#FFFFFF; --ink:#1A1F2B; --muted:#5E6675; --line:#D9DEE6; --grid:rgba(40,70,140,.06);
+  --ai:#27407E; --ai-soft:#E4E9F5; --shu:#C2362B; --shu-soft:#FBE8E5; --ok:#C2362B; --warn:#A86A00; --warn-soft:#FFF3D6;
+  --f-display:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  --f-mono:"M PLUS 1 Code",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#12151C; --sheet:#1A1E28; --ink:#E7EAF0; --muted:#9AA3B2; --line:#2E3442; --grid:rgba(140,170,255,.05);
+  --ai:#9DB2EE; --ai-soft:#24304D; --shu:#FF7A6B; --shu-soft:#3A2224; --ok:#FF7A6B; --warn:#F2B84B; --warn-soft:#3A2F17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#12151C; --sheet:#1A1E28; --ink:#E7EAF0; --muted:#9AA3B2; --line:#2E3442; --grid:rgba(140,170,255,.05);
+  --ai:#9DB2EE; --ai-soft:#24304D; --shu:#FF7A6B; --shu-soft:#3A2224; --ok:#FF7A6B; --warn:#F2B84B; --warn-soft:#3A2F17; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+.wrap{max-width:780px;margin:0 auto;padding-inline:16px;padding-block:24px 64px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:18px}
+.brand h1{font-family:var(--f-display);font-weight:800;font-size:clamp(1.6rem,4.5vw,2.2rem);line-height:1.15;margin:0;text-wrap:balance}
+.brand h1 .jp{color:var(--shu);display:block;font-size:.62em;font-weight:700;margin-top:2px}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:.9rem}
+.examtag{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.06em;border:1.5px solid var(--shu);color:var(--shu);padding:4px 10px;border-radius:3px;white-space:nowrap}
+nav.sections{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;scrollbar-width:thin}
+nav.sections button{flex:0 0 auto;font:inherit;font-size:.88rem;border:1px solid var(--line);background:var(--sheet);color:var(--ink);padding:7px 12px;border-radius:999px;cursor:pointer;display:flex;gap:6px;align-items:baseline}
+nav.sections button .k{font-family:var(--f-display);font-weight:700}
+nav.sections button[aria-pressed="true"]{background:var(--ai);border-color:var(--ai);color:var(--sheet)}
+nav.sections button:focus-visible,.btn:focus-visible,.choice:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--shu);outline-offset:2px}
+.boxes{display:flex;flex-wrap:wrap;gap:3px;margin:0 0 12px}
+.boxes span{width:20px;height:20px;border:1px solid var(--line);background:var(--sheet);display:grid;place-items:center;font-size:12px;font-family:var(--f-display);font-weight:700;color:var(--shu);line-height:1}
+.boxes span.cur{border-color:var(--ai);box-shadow:inset 0 0 0 1px var(--ai)}
+.boxes span.bad{color:var(--muted)}
+.meta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:.85rem;margin-bottom:8px;font-variant-numeric:tabular-nums;flex-wrap:wrap}
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:6px;padding:22px clamp(16px,4vw,28px);box-shadow:0 1px 0 var(--line)}
+.cat{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ai);margin-bottom:6px}
+.prompt{font-size:1rem;margin:0 0 10px;color:var(--muted)}
+.jp-big{font-family:var(--f-display);font-weight:700;font-size:clamp(1.35rem,4.6vw,1.9rem);line-height:1.55;margin:4px 0 16px;word-break:keep-all;overflow-wrap:anywhere}
+.jp-big .blank{display:inline-block;min-width:3.2em;border-bottom:2px solid var(--shu);margin:0 .15em;text-align:center;color:var(--shu)}
+.passage{font-family:var(--f-display);font-size:1.05rem;line-height:2;background:var(--ai-soft);border-radius:4px;padding:12px 16px;margin:0 0 14px;max-height:260px;overflow:auto}
+.passage h3{margin:0 0 4px;font-size:1rem}
+details.pass{margin-bottom:12px}
+details.pass summary{cursor:pointer;color:var(--ai);font-size:.9rem;margin-bottom:6px}
+.choices{display:grid;gap:8px}
+.choice{font:inherit;text-align:left;display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:5px;padding:10px 14px;cursor:pointer;font-size:1.02rem}
+.choice .n{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);padding-top:3px;min-width:1.2em}
+.choice .t{font-family:var(--f-body);min-width:0}
+.choice:hover:not(:disabled){border-color:var(--ai)}
+.choice.right{border-color:var(--shu);background:var(--shu-soft)}
+.choice.wrong{opacity:.7;text-decoration:line-through;text-decoration-color:var(--muted)}
+.choice:disabled{cursor:default}
+.field{display:flex;gap:8px;flex-wrap:wrap}
+.field input{flex:1 1 220px;min-width:0;font:inherit;font-size:1.15rem;padding:10px 12px;border:1.5px solid var(--line);border-radius:5px;background:var(--paper);color:var(--ink)}
+.field input:focus{border-color:var(--ai)}
+.preview{font-family:var(--f-mono);font-size:.9rem;color:var(--muted);min-height:1.6em;margin-top:6px}
+.preview b{font-family:var(--f-display);font-size:1.15rem;color:var(--ai);font-weight:700}
+textarea{width:100%;font:inherit;font-size:1.05rem;padding:10px 12px;border:1.5px solid var(--line);border-radius:5px;background:var(--paper);color:var(--ink);min-height:90px;resize:vertical}
+.btn{font:inherit;font-weight:700;border:1.5px solid var(--ai);background:var(--ai);color:var(--sheet);border-radius:5px;padding:9px 16px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ai)}
+.btn.shu{background:var(--shu);border-color:var(--shu)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.fb{margin-top:16px;border-top:1px dashed var(--line);padding-top:14px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start}
+.stamp{grid-row:span 3;width:54px;height:54px;border-radius:50%;border:3px solid var(--shu);color:var(--shu);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:1.5rem;transform:rotate(-8deg)}
+.stamp.x{border-color:var(--muted);color:var(--muted);border-radius:6px}
+.stamp.near{border-color:var(--warn);color:var(--warn);border-radius:6px;font-size:1.2rem}
+.fb .verdict{font-weight:700}
+.fb .ans{font-family:var(--f-display);font-size:1.15rem}
+.fb .exp{color:var(--muted);font-size:.93rem;min-width:0}
+.nearnote{background:var(--warn-soft);color:var(--ink);border-radius:4px;padding:6px 10px;font-size:.88rem;margin-top:4px}
+.model{font-family:var(--f-display);font-size:1.1rem;line-height:1.9;background:var(--ai-soft);padding:10px 14px;border-radius:4px;margin-top:10px}
+.check{margin:8px 0 0;padding-left:1.2em;color:var(--muted);font-size:.92rem}
+.kbd{font-family:var(--f-mono);font-size:.75rem;color:var(--muted);margin-top:14px}
+.results h2{font-family:var(--f-display);font-size:1.6rem;margin:0 0 4px}
+.score{font-family:var(--f-display);font-weight:800;font-size:3.2rem;color:var(--shu);line-height:1;font-variant-numeric:tabular-nums}
+.bycat{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:16px 0}
+.bycat div{border:1px solid var(--line);border-radius:5px;padding:8px 10px;font-size:.88rem}
+.bycat b{display:block;font-size:1.1rem;font-variant-numeric:tabular-nums}
+.missed{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:8px}
+.missed li{border-left:3px solid var(--shu);padding:4px 0 4px 12px;font-size:.92rem}
+.missed .q{font-family:var(--f-display);font-weight:700}
+.tips{margin-top:22px;font-size:.88rem;color:var(--muted)}
+.tips summary{cursor:pointer;color:var(--ai);font-weight:700}
+.tips table{border-collapse:collapse;margin-top:8px;font-family:var(--f-mono);font-size:.85rem}
+.tips td{border:1px solid var(--line);padding:3px 8px}
+.tips-wrap{overflow-x:auto}
+@media (prefers-reduced-motion:no-preference){.stamp{animation:pop .25s ease-out}@keyframes pop{from{transform:scale(1.5) rotate(-8deg);opacity:0}to{transform:scale(1) rotate(-8deg);opacity:1}}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>IC1 Drill <span class="jp">気をつけること・毎日の生活</span></h1>
+      <p>JAPA2001 · Units 12 &amp; 13 · type answers in hiragana, katakana, kanji or romaji</p>
+    </div>
+    <div class="examtag">IC1 · WED 7 OCT · LAB 2</div>
+  </header>
+
+  <nav class="sections" id="nav" aria-label="Practice sections"></nav>
+  <div class="meta"><span id="metaL"></span><span id="metaR"></span></div>
+  <div class="boxes" id="boxes" aria-hidden="true"></div>
+  <main id="stage"></main>
+
+  <details class="tips">
+    <summary>How answers are checked</summary>
+    <p>Romaji turns into hiragana as you type (shown under the box). Both Hepburn and kunrei spellings work: <code>shi/si</code>, <code>chi/ti</code>, <code>tsu/tu</code>, <code>fu/hu</code>, <code>ji/zi</code>, <code>sha/sya</code>. Double a consonant for small っ (<code>itta</code> → いった). Type <code>nn</code> or <code>n'</code> for ん when it comes before a vowel. Long vowels: <code>ou</code> or <code>ō</code>.</p>
+    <p>Kanji answers are accepted where the kanji is in Units 12–13; the hiragana is always accepted. For particles, <code>wa</code> counts for は and <code>o</code> for を.</p>
+    <p>If your answer differs only by a small っ, a long vowel, small ゃゅょ or ゛゜, you'll see an orange <b>Almost</b>. It still counts as wrong, because it would on paper.</p>
+  </details>
+</div>
+
+<script id="core">
+/* ---------- romaji → hiragana ---------- */
+const RT = (()=>{const t={a:'あ',i:'い',u:'う',e:'え',o:'お'};
+ const rows={k:'かきくけこ',s:'さしすせそ',t:'たちつてと',n:'なにぬねの',h:'はひふへほ',m:'まみむめも',r:'らりるれろ',g:'がぎぐげご',z:'ざじずぜぞ',d:'だぢづでど',b:'ばびぶべぼ',p:'ぱぴぷぺぽ'};
+ for(const c in rows)'aiueo'.split('').forEach((v,j)=>t[c+v]=rows[c][j]);
+ Object.assign(t,{ya:'や',yu:'ゆ',yo:'よ',wa:'わ',wo:'を',we:'うぇ',wi:'うぃ',shi:'し',chi:'ち',tsu:'つ',fu:'ふ',ji:'じ',
+  fa:'ふぁ',fi:'ふぃ',fe:'ふぇ',fo:'ふぉ',she:'しぇ',che:'ちぇ',je:'じぇ',va:'ゔぁ',vi:'ゔぃ',vu:'ゔ',ve:'ゔぇ',vo:'ゔぉ','-':'ー',
+  xa:'ぁ',xi:'ぃ',xu:'ぅ',xe:'ぇ',xo:'ぉ',la:'ぁ',li:'ぃ',lu:'ぅ',le:'ぇ',lo:'ぉ',xtu:'っ',ltu:'っ',xtsu:'っ',ltsu:'っ',xya:'ゃ',xyu:'ゅ',xyo:'ょ',lya:'ゃ',lyu:'ゅ',lyo:'ょ',
+  thi:'てぃ',dhi:'でぃ',twu:'とぅ'});
+ const yo={k:'き',g:'ぎ',n:'に',h:'ひ',m:'み',r:'り',b:'び',p:'ぴ',s:'し',z:'じ',t:'ち',c:'ち',d:'ぢ',j:'じ'};
+ const sm={a:'ゃ',u:'ゅ',o:'ょ'};
+ for(const c in yo)for(const v in sm)t[c+'y'+v]=yo[c]+sm[v];
+ for(const v in sm){t['sh'+v]='し'+sm[v];t['ch'+v]='ち'+sm[v];t['j'+v]='じ'+sm[v];}
+ return t;})();
+const VOW='aiueo';
+function toKana(raw){
+  let s=raw.normalize('NFKC').toLowerCase().replace(/ō/g,'ou').replace(/ū/g,'uu').replace(/ā/g,'aa').replace(/ī/g,'ii').replace(/ē/g,'ee').replace(/ô/g,'ou').replace(/û/g,'uu');
+  let out='',i=0;
+  while(i<s.length){
+    const c=s[i];
+    if(!/[a-z\-']/.test(c)){out+=c;i++;continue}
+    if(c==="'"){i++;continue}
+    if(c==='n'){
+      const n1=s[i+1],n2=s[i+2];
+      if(n1==="'"){out+='ん';i+=2;continue}
+      if(n1==='n'){ if(n2!==undefined&&(VOW.includes(n2)||n2==='y')){out+='ん';i+=1;} else {out+='ん';i+=2;} continue}
+      if(n1===undefined||!(VOW.includes(n1)||n1==='y')){out+='ん';i++;continue}
+    }
+    if(c==='t'&&s[i+1]==='c'&&s[i+2]==='h'){out+='っ';i++;continue}
+    if(/[bcdfghjkmpqrstvwxyz]/.test(c)&&s[i+1]===c){out+='っ';i++;continue}
+    let hit=false;
+    for(let L=4;L>=1;L--){const k=s.substr(i,L);if(RT[k]){out+=RT[k];i+=L;hit=true;break}}
+    if(!hit){out+=c;i++}
+  }
+  return out;
+}
+function kata2hira(s){return s.replace(/[ァ-ヶ]/g,ch=>String.fromCharCode(ch.charCodeAt(0)-0x60))}
+function norm(s){
+  return kata2hira(toKana(String(s))).replace(/[\s　、。，．,.!?！？「」『』（）()・~〜～]/g,'');
+}
+function fuzzy(s){
+  return norm(s).normalize('NFD').replace(/[゙゚]/g,'').normalize('NFC')
+    .replace(/っ/g,'').replace(/[ゃ]/g,'や').replace(/[ゅ]/g,'ゆ').replace(/[ょ]/g,'よ')
+    .replace(/([おこそとのほもよろごぞどぼぽうくすつぬふむゆるぐずづぶぷ]|[ょゅ])う/g,'$1').replace(/ー/g,'');
+}
+function check(input,accepts){
+  const n=norm(input); if(!n)return 'empty';
+  if(accepts.some(a=>norm(a)===n))return 'right';
+  const f=fuzzy(input); if(accepts.some(a=>fuzzy(a)===f))return 'near';
+  return 'wrong';
+}
+
+/* ---------- verb conjugator ---------- */
+const A_ROW={'き':'か','ぎ':'が','し':'さ','ち':'た','に':'な','び':'ば','み':'ま','り':'ら','い':'わ'};
+const U_ROW={'き':'く','ぎ':'ぐ','し':'す','ち':'つ','に':'ぬ','び':'ぶ','み':'む','り':'る','い':'う'};
+const TE1={'き':'いて','ぎ':'いで','し':'して','ち':'って','り':'って','い':'って','に':'んで','び':'んで','み':'んで'};
+function conj(v,form){
+  const stem=v.masu.slice(0,-2); // drop ます
+  let te,dict,nai;
+  if(v.g===1){const last=stem.slice(-1),head=stem.slice(0,-1);
+    te=v.iku?head+'って':head+TE1[last]; dict=head+U_ROW[last]; nai=head+A_ROW[last]+'ない';}
+  else if(v.g===2){te=stem+'て';dict=stem+'る';nai=stem+'ない';}
+  else { // g3: する or 来る (stem ends with し or き)
+    const head=stem.slice(0,-1);
+    if(stem.endsWith('し')){te=head+'して';dict=head+'する';nai=head+'しない';}
+    else {te=head+'きて';dict=head+'くる';nai=head+'こない';}
+  }
+  const ta=te.replace(/て$/,'た').replace(/で$/,'だ');
+  const naiStem=nai.slice(0,-2);
+  switch(form){
+    case 'dict':return dict; case 'nai':return nai; case 'te':return te; case 'ta':return ta;
+    case 'tari':return ta+'り'; case 'tara':return ta+'ら'; case 'nakattara':return naiStem+'なかったら';
+    case 'nagara':return stem+'ながら'; case 'tekara':return te+'から';
+    case 'hou':return ta+'ほうがいい'; case 'naihou':return nai+'ほうがいい';
+  }
+}
+function kanjiOf(v,kana){ if(!v.kj)return null; return v.kj+kana.slice(v.rd.length); }
+</script>
+
+<script>
+/* ---------- data ---------- */
+const VERBS=[
+ {masu:'たべます',kj:'食',rd:'た',g:2,en:'eat'},{masu:'のみます',kj:'飲',rd:'の',g:1,en:'drink'},
+ {masu:'ききます',kj:'聞',rd:'き',g:1,en:'listen/ask'},{masu:'みます',kj:'見',rd:'み',g:2,en:'see'},
+ {masu:'します',g:3,en:'do'},{masu:'はなします',kj:'話',rd:'はな',g:1,en:'speak'},
+ {masu:'よみます',kj:'読',rd:'よ',g:1,en:'read'},{masu:'いきます',kj:'行',rd:'い',g:1,iku:true,en:'go',trap:'行く is the one Group 1 exception: いって / いった, never いいて.'},
+ {masu:'きます',kj:'来',rd:'き',g:3,en:'come',trap:'来る is irregular: くる / こない / きて.'},
+ {masu:'かえります',kj:'帰',rd:'かえ',g:1,en:'return home',trap:'帰る ends in -eru but is Group 1 → かえって.'},
+ {masu:'ねます',kj:'寝',rd:'ね',g:2,en:'sleep',trap:'寝る is Group 2 → ねて, not ねって.'},
+ {masu:'かきます',kj:'書',rd:'か',g:1,en:'write'},{masu:'とります',g:1,en:'take (a photo)'},
+ {masu:'あいます',kj:'会',rd:'あ',g:1,en:'meet'},{masu:'かいます',kj:'買',rd:'か',g:1,en:'buy'},
+ {masu:'およぎます',kj:'泳',rd:'およ',g:1,en:'swim'},{masu:'いそぎます',kj:'急',rd:'いそ',g:1,en:'hurry'},
+ {masu:'はしります',kj:'走',rd:'はし',g:1,en:'run',trap:'走る ends in -iru but is Group 1 → はしって.'},
+ {masu:'やすみます',kj:'休',rd:'やす',g:1,en:'rest'},{masu:'あらいます',kj:'洗',rd:'あら',g:1,en:'wash'},
+ {masu:'のります',kj:'乗',rd:'の',g:1,en:'ride / get on'},{masu:'おきます',kj:'起',rd:'お',g:2,en:'get up'},
+ {masu:'でます',kj:'出',rd:'で',g:2,en:'leave / go out'},{masu:'きます',kj:'着',rd:'き',g:2,en:'wear (shirt)',label:'着ます',trap:'着る (wear) is Group 2 → きて, きない.'},
+ {masu:'あそびます',kj:'遊',rd:'あそ',g:1,en:'play'},{masu:'まちます',kj:'待',rd:'ま',g:1,en:'wait'},
+ {masu:'ふります',kj:'降',rd:'ふ',g:1,en:'fall (rain)'},{masu:'はいります',kj:'入',rd:'はい',g:1,en:'enter / take (a bath)',trap:'入る looks like Group 2 but is Group 1 → はいって.'},
+ {masu:'みがきます',g:1,en:'brush (teeth)'},{masu:'ぬぎます',kj:'脱',rd:'ぬ',g:1,en:'take off (shoes)'},
+ {masu:'つかいます',kj:'使',rd:'つか',g:1,en:'use'},{masu:'つくります',kj:'作',rd:'つく',g:1,en:'make'},
+ {masu:'しめます',g:2,en:'close'},{masu:'つけます',g:2,en:'turn on'},{masu:'あびます',g:2,en:'take (a shower)',trap:'あびる is Group 2 → あびて.'},
+ {masu:'おしえます',kj:'教',rd:'おし',g:2,en:'teach'},{masu:'べんきょうします',kj:'勉強',rd:'べんきょう',g:3,en:'study'},
+ {masu:'うたいます',kj:'歌',rd:'うた',g:1,en:'sing'},{masu:'はたらきます',kj:'働',rd:'はたら',g:1,en:'work'},
+ {masu:'つきます',kj:'着',rd:'つ',g:1,en:'arrive',label:'着きます'},{masu:'でんわします',kj:'電話',rd:'でんわ',g:3,en:'phone'},
+ {masu:'はじまります',kj:'始',rd:'はじ',g:1,en:'begin'},{masu:'おわります',kj:'終',rd:'お',g:1,en:'end'}
+];
+const FORMS={
+ dict:{lab:'dictionary form (じしょ)'},nai:{lab:'ない form'},te:{lab:'て form'},ta:{lab:'た form'},
+ tari:{lab:'〜たり form'},tara:{lab:'〜たら (when / if)'},nakattara:{lab:'〜なかったら (if not)'},
+ nagara:{lab:'〜ながら (while)'},tekara:{lab:'〜てから (after)'},hou:{lab:'〜たほうがいい (you should)'},naihou:{lab:'〜ないほうがいい (you shouldn\'t)'}
+};
+const RULE={
+ 1:'Group 1: き→いて, ぎ→いで, し→して, い/ち/り→って, み/び/に→んで.',
+ 2:'Group 2 (-iru/-eru): drop る, add the ending.',
+ 3:'Group 3 (irregular): する→して/しない, くる→きて/こない.'
+};
+
+// Kanji words: [word, readings, meaning, unit, lookalike distractors, note]
+const KANJI=[
+ ['月曜日',['げつようび'],'Monday',12,['月躍日','月耀日','月曜目'],''],
+ ['土曜日',['どようび'],'Saturday',12,['士曜日','土躍日','上曜日'],'土 is ど here, not つち.'],
+ ['木曜日',['もくようび'],'Thursday',12,['本曜日','木躍日','未曜日'],''],
+ ['週',['しゅう'],'week',12,['周','過','遇'],''],
+ ['先週',['せんしゅう'],'last week',12,['先周','先過','生週'],''],
+ ['来週',['らいしゅう'],'next week',12,['来周','米週','未週'],''],
+ ['今週',['こんしゅう'],'this week',12,['今周','令週','今過'],''],
+ ['来月',['らいげつ'],'next month',12,['米月','来日','未月'],'Months use げつ: 先月 せんげつ, 今月 こんげつ.'],
+ ['今年',['ことし'],'this year',12,['今月','令年','今午'],'Irregular reading: ことし, not こんねん.'],
+ ['去年',['きょねん'],'last year',12,['去午','法年','去月'],''],
+ ['2時',['にじ'],'2 o\'clock',12,[],''],
+ ['4時',['よじ'],'4 o\'clock',12,[],'Trap: 4時 is よじ, not よんじ or しじ.'],
+ ['7時半',['しちじはん'],'7:30',13,[],'7時 is しちじ. 半 = half.'],
+ ['9時',['くじ'],'9 o\'clock',12,[],'Trap: 9時 is くじ, not きゅうじ.'],
+ ['時間',['じかん'],'time / hours',12,['時聞','時問','持間'],'間 (between) vs 聞 (listen) vs 問 (question): look inside the gate.'],
+ ['時々',['ときどき'],'sometimes',12,['時時々','持々','待々'],''],
+ ['洗濯',['せんたく'],'laundry',12,['洗躍','洗曜','先濯'],'濯 has the water radical 氵; 曜 has 日.'],
+ ['洗います',['あらいます'],'wash',12,['先います','洗ます','流います'],''],
+ ['雨',['あめ'],'rain',12,['雪','両','曇'],''],
+ ['大雨',['おおあめ'],'heavy rain',12,['大雪','犬雨','太雨'],''],
+ ['小雨',['こさめ'],'light rain',12,['少雨','小両','小雪'],'Trap: こさめ, not こあめ.'],
+ ['風',['かぜ'],'wind',12,['凧','鳳','虱'],''],
+ ['お風呂',['おふろ'],'bath',12,['お凧呂','お風宮','お風品'],'風 is ふ here.'],
+ ['台風',['たいふう'],'typhoon',12,['台凧','合風','治風'],'台 is たい in 台風 but だい in 台所.'],
+ ['台所',['だいどころ'],'kitchen',12,['台処','合所','台研'],''],
+ ['窓',['まど'],'window',12,['空','窃','突'],''],
+ ['窓口',['まどぐち'],'counter (public office)',12,['空口','窓日','窓目'],''],
+ ['自転車',['じてんしゃ'],'bicycle',12,['自軽車','自転東','白転車'],''],
+ ['運転',['うんてん'],'driving',12,['運軽','連転','運伝'],''],
+ ['天気',['てんき'],'weather',12,['夫気','天汽','大気'],'天 has a short top stroke; 夫 pokes through.'],
+ ['天気予報',['てんきよほう'],'weather forecast',12,['夫気予報','天気余報','天気予服'],''],
+ ['入ります',['はいります'],'enter',12,['人ります','八ります','込ります'],'入 vs 人: in 入 the left stroke is short and on top.'],
+ ['入口',['いりぐち'],'entrance',12,['人口','入日','入目'],'人口 (じんこう) means population.'],
+ ['入学',['にゅうがく'],'entering a school',12,['人学','入字','入覚'],''],
+ ['乗ります',['のります'],'ride / get on',12,['来ります','乗いります','垂ります'],''],
+ ['乗り物',['のりもの'],'vehicle',12,['来り物','乗り勿','乗り牧'],''],
+ ['早く',['はやく'],'early / quickly',12,['旱く','草く','卓く'],''],
+ ['早い',['はやい'],'early',12,['草い','旱い','是い'],''],
+ ['強い風',['つよいかぜ'],'strong wind',12,['弱い風','強い凧','強い鳳'],''],
+ ['外',['そと'],'outside',12,['処','夕','多'],''],
+ ['授業',['じゅぎょう'],'class / lesson',13,['受業','授棠','投業'],'授 has the hand radical 扌; 受 has none.'],
+ ['図書館',['としょかん'],'library',13,['図書官','図書管','区書館'],'館 has the food radical 食.'],
+ ['研究',['けんきゅう'],'research',13,['研空','研突','研九'],'究 has 九 under the roof; 空 has 工.'],
+ ['研究室',['けんきゅうしつ'],'lab / research room',13,['研究宝','研空室','研究屋'],''],
+ ['実験',['じっけん'],'experiment',13,['実検','実険','宝験'],'験 has the horse radical 馬. Small っ: じっけん.'],
+ ['発表',['はっぴょう'],'presentation',13,['登表','発衣','発俵'],'Small っ + ぴ: はっぴょう.'],
+ ['準備',['じゅんび'],'preparation',13,['準傭','準偏','準借'],''],
+ ['始まります',['はじまります'],'begin',13,['治まります','台まります','姶まります'],'始 has 女 on the left.'],
+ ['終わります',['おわります'],'end',13,['給わります','絡わります','紋わります'],''],
+ ['暗い',['くらい'],'dark',13,['晴い','暖い','曜い'],'暗 = 日 + 音.'],
+ ['遅い',['おそい'],'late / slow',13,['違い','運い','遍い'],'遅 vs 違 (ちがい): both have the walking radical 辶.'],
+ ['着きます',['つきます'],'arrive',13,['着ます','差きます','若きます'],'着ます (きます) = wear; 着きます (つきます) = arrive.'],
+ ['毎朝',['まいあさ'],'every morning',13,['毎期','海朝','毎胡'],''],
+ ['晩ごはん',['ばんごはん'],'dinner',13,['晚ごはん','暁ごはん','勉ごはん'],''],
+];
+
+const GRAMMAR=[
+ {jp:'週末、そうじを<span class="blank">　</span>、せんたくをしたりします。',p:'Choose the word for the blank.',c:['したり','して','しながら','したら'],a:0,e:'〜たり〜たりします: every verb in the list takes たり, and the list ends with する.'},
+ {jp:'本を読んだり、音楽を聞いたり<span class="blank">　</span>。',p:'"I do things like read books and listen to music."',c:['します','です','ます','ください'],a:0,e:'A たり list always closes with する in the tense you need: します / しました / したいです.'},
+ {jp:'行きます → 〜たり',p:'Which たり form is correct?',c:['いったり','いきたり','いいたり','いけたり'],a:0,e:'行く is the Group 1 exception: いって → いった → いったり.'},
+ {jp:'夏休みに、海に行ったり、山に行ったり<span class="blank">　</span>。',p:'Past: "During summer break I did things like..."',c:['しました','します','でした','しましょう'],a:0,e:'Tense goes on the final する: 〜たり〜たりしました.'},
+ {jp:'ラボクラスで、ねたり、スマホをしたり<span class="blank">　</span>。',p:'"In lab class you must not sleep or use your phone."',c:['してはいけません','してもいいです','したいです','したことがあります'],a:0,e:'〜てはいけません = must not. 〜てもいいです = may.'},
+ {jp:'かぜをひきました。薬を<span class="blank">　</span>ほうがいいですよ。',p:'Give advice: "You should take medicine."',c:['のんだ','のむ','のんで','のみ'],a:0,e:'Positive advice = た form + ほうがいいです.'},
+ {jp:'台風の時は、外に<span class="blank">　</span>ほうがいいです。',p:'"You shouldn\'t go outside during a typhoon."',c:['でない','でなかった','でた','でません'],a:0,e:'Negative advice uses plain ない form, never なかった: 出ないほうがいいです.'},
+ {jp:'Most polite advice to your teacher:',p:'Which sounds softest?',c:['休んだほうがいいと思います。','休んだほうがいいです。','休んだほうがよくない？','休まなければなりません。'],a:0,e:'〜と思います softens the advice. よくない？ is casual; なければなりません is "must".'},
+ {jp:'電話したほうがよくない？',p:'What does this mean?',c:['Shouldn\'t you call? (casual)','It\'s not good to call.','You must not call.','I don\'t want to call.'],a:0,e:'〜たほうがよくない？ is a casual way to suggest something to a friend.'},
+ {jp:'起き<span class="blank">　</span>、すぐに歯をみがきます。',p:'"As soon as I get up, I brush my teeth."',c:['たら','てから','ながら','たり'],a:0,e:'すぐに + 〜たら = as soon as. 〜てから just means "after".'},
+ {jp:'手を洗っ<span class="blank">　</span>、ごはんを食べます。',p:'"After washing my hands, I eat."',c:['てから','ながら','たり','ないほうが'],a:0,e:'て form + から = A and then B (order matters).'},
+ {jp:'雨が<span class="blank">　</span>、うちで本を読みます。',p:'"If it rains, I\'ll read at home."',c:['ふったら','ふって','ふりながら','ふったり'],a:0,e:'Conditional: た form + ら. ふります → ふった → ふったら.'},
+ {jp:'雨が<span class="blank">　</span>、行きます。',p:'"If it doesn\'t rain, I\'ll go."',c:['ふらなかったら','ふらないたら','ふらなくたら','ふりなかったら'],a:0,e:'ない form → なかった → なかったら. ふる → ふらない → ふらなかったら.'},
+ {jp:'チケットが<span class="blank">　</span>、行きます。',p:'"If the tickets are cheap, I\'ll go."',c:['安かったら','安いだったら','安だったら','安いたら'],a:0,e:'い-adjective: drop い, add かったら.'},
+ {jp:'水が<span class="blank">　</span>、泳ぎます。',p:'"If the water is clean, I\'ll swim."',c:['きれいだったら','きれいかったら','きれくて','きれいたら'],a:0,e:'Trap: きれい is a な-adjective, so it takes だったら.'},
+ {jp:'もし、お金持ち<span class="blank">　</span>、大きいうちがほしいです。',p:'"If I were rich..."',c:['だったら','かったら','たら','じゃなかったら'],a:0,e:'Noun + だったら. お金持ち is a noun.'},
+ {jp:'もし、ジャマイカ人<span class="blank">　</span>、…',p:'"If I weren\'t Jamaican..."',c:['じゃなかったら','だったら','じゃないたら','なかったら'],a:0,e:'Noun negative: じゃない → じゃなかった → じゃなかったら.'},
+ {jp:'元気<span class="blank">　</span>、泳ぎます。',p:'"If I\'m feeling well, I\'ll swim."',c:['だったら','かったら','くて','だたら'],a:0,e:'元気 is a な-adjective → 元気だったら.'},
+ {jp:'時間が<span class="blank">　</span>、本を読みます。',p:'"If I have time..."',c:['あったら','いたら','あるたら','あって'],a:0,e:'Time "exists" with ある → あった → あったら.'},
+ {jp:'"I eat breakfast while watching the news."',p:'Pick the correct sentence.',c:['ニュースを見ながら、朝ごはんを食べます。','朝ごはんを食べながら、ニュースを見ます。','ニュースを見て、朝ごはんを食べます。','ニュースを見たり、朝ごはんを食べたりします。'],a:0,e:'With ながら, the main action goes last. Here the main action is eating.'},
+ {jp:'聞きます → 〜ながら',p:'Which form is correct?',c:['ききながら','きいてながら','きくながら','きいながら'],a:0,e:'ます stem + ながら: きき(ます) → ききながら.'},
+ {jp:'スマホを見ながら、運転してはいけません。',p:'Which is the main action?',c:['運転します','見ます','いけません','スマホ'],a:0,e:'The verb after ながら (the last one) is the main activity.'},
+ {jp:'Which sentence gives the actions in a fixed order?',p:'',c:['起きて、シャワーをあびて、朝ごはんを食べます。','シャワーをあびたり、朝ごはんを食べたりします。','シャワーをあびながら、歌います。','シャワーをあびたら、どうしますか。'],a:0,e:'〜て、〜て gives a fixed order. 〜たり〜たり is a random list.'},
+ {jp:'ひま<span class="blank">　</span>とき、YouTubeを見ます。',p:'"When I\'m free..."',c:['な','の','だ','に'],a:0,e:'な-adjective + な + とき.'},
+ {jp:'子ども<span class="blank">　</span>とき、モンテゴベイに住んでいました。',p:'"When I was a child..."',c:['の','な','だ','が'],a:0,e:'Noun + の + とき.'},
+ {jp:'1時間目の授業が<span class="blank">　</span>ときは、8時に起きます。',p:'"When I don\'t have first period..."',c:['ない','なかった','なくて','なし'],a:0,e:'Plain form + とき. ない + とき.'},
+ {jp:'授業は午前中<span class="blank">　</span>です。',p:'"Classes are only in the morning."',c:['だけ','から','まで','ごろ'],a:0,e:'だけ = only.'},
+ {jp:'お酒を飲んだら、車を運転してはいけません。',p:'What does this mean?',c:['If you drink, you must not drive.','After driving, don\'t drink.','You may drive while drinking.','You should drink, then drive.'],a:0,e:'〜たら (if) + 〜てはいけません (must not).'},
+ {jp:'毎日日本語を勉強したら、上手になります。',p:'What does this mean?',c:['If you study Japanese every day, you\'ll get good.','I studied every day and got good.','Study every day so you don\'t get worse.','While studying every day, I became a teacher.'],a:0,e:'〜たら = if; 上手になります = become skilled.'},
+ {jp:'Which たり form is WRONG?',p:'',c:['ねったり','かえったり','はいったり','はしったり'],a:0,e:'寝る is Group 2 → ねたり. 帰る, 入る and 走る are Group 1 and do double the っ.'},
+ {jp:'泳ぎます → て form',p:'',c:['およいで','およいて','およって','およんで'],a:0,e:'ぎ → いで. Only き → いて.'},
+ {jp:'安くなかったです → plain form',p:'',c:['安くなかった','安いじゃなかった','安くないでした','安かったない'],a:0,e:'Drop です from the polite い-adjective past negative.'},
+ {jp:'"I want to do things like eat sushi and drink tea."',p:'',c:['すしを食べたり、お茶を飲んだりしたいです。','すしを食べたり、お茶を飲んだりしたことがあります。','すしを食べたり、お茶を飲んだりしてください。','すしを食べたり、お茶を飲んだりしています。'],a:0,e:'したい = want to. したことがある = have done before.'},
+ {jp:'UWIをそつぎょうしたら、アメリカで<span class="blank">　</span>。',p:'"When I graduate, I want to work in America."',c:['はたらきたいです','はたらいたいです','はたらきたかったら','はたらいてください'],a:0,e:'ます stem + たい: はたらき(ます) → はたらきたい.'},
+];
+
+const PARTICLES=[
+ ['月曜日<span class="blank">　</span>金曜日まで、毎日学校に行きます。',['から'],'from'],
+ ['月曜日から金曜日<span class="blank">　</span>、毎日学校に行きます。',['まで'],'until'],
+ ['毎日学校<span class="blank">　</span>行きます。',['に','へ'],'to (destination)'],
+ ['授業は、週<span class="blank">　</span>12コマあります。',['に'],'per (week)'],
+ ['自転車<span class="blank">　</span>学校に行きます。',['で'],'by (means)'],
+ ['8時半にうち<span class="blank">　</span>出ます。',['を'],'leave (point of departure)'],
+ ['タクシー<span class="blank">　</span>乗ったほうがいいです。',['に'],'get on (Trap: not を)'],
+ ['お風呂<span class="blank">　</span>入ります。',['に'],'get in (the bath)'],
+ ['石けん<span class="blank">　</span>洗ったほうがいいです。',['で'],'with (tool)'],
+ ['雨<span class="blank">　</span>ふったら、行きません。',['が'],'subject in a たら clause'],
+ ['友達<span class="blank">　</span>話をしながら、晩ごはんを食べます。',['と'],'with (a person)'],
+ ['テレビ<span class="blank">　</span>ニュースを見ながら、朝ごはんを食べます。',['で'],'on (TV)'],
+ ['学校<span class="blank">　</span>、10分くらいです。',['まで'],'to/as far as'],
+ ['先生<span class="blank">　</span>聞いたほうがいいと思います。',['に'],'ask (someone)'],
+ ['授業は、8時50分<span class="blank">　</span>始まります。',['に'],'at (clock time)'],
+ ['台風の時<span class="blank">　</span>、外に出ないほうがいいです。',['は','には'],'topic: "as for typhoon time"'],
+ ['12時ごろ、うち<span class="blank">　</span>着きます。',['に'],'arrive at'],
+ ['午後<span class="blank">　</span>、教科書を読んだり、レポートを書いたりします。',['から'],'from (the afternoon on)'],
+ ['手ぶくろ<span class="blank">　</span>したほうがいいです。',['を'],'object'],
+ ['時間<span class="blank">　</span>あったら、本を読みます。',['が'],'subject of ある'],
+ ['ジャマイカ<span class="blank">　</span>ハリケーンが来ます。',['に'],'to (place)'],
+ ['研究室<span class="blank">　</span>実験をします。',['で'],'place of action'],
+ ['日本語<span class="blank">　</span>上手になりたいです。',['が'],'subject of 上手'],
+ ['外<span class="blank">　</span>出ないほうがいいです。',['に'],'go out to'],
+ ['自分<span class="blank">　</span>料理を作ります。',['で'],'by (oneself)'],
+ ['びょうき<span class="blank">　</span>ときは、休んだほうがいいです。',['の'],'noun + の + とき'],
+ ['うがい<span class="blank">　</span>してください。',['を'],'object of する'],
+ ['ハーフウェイツリー<span class="blank">　</span>買い物をします。',['で'],'place of action'],
+ ['わたしは、さかな<span class="blank">　</span>あまり好きじゃありません。',['が','は'],'object of 好き (は also OK in a negative)'],
+ ['父は銀行<span class="blank">　</span>つとめています。',['に'],'つとめる takes に'],
+ ['母はUWI<span class="blank">　</span>はたらいています。',['で'],'はたらく takes で (place of action)'],
+ ['富士山<span class="blank">　</span>のぼったことがあります。',['に'],'climb (destination)'],
+ ['友だち<span class="blank">　</span>バスに乗ります。',['と'],'with (a person)'],
+ ['わたしは、毎朝バス<span class="blank">　</span>乗ります。',['に'],'get on (not を)'],
+];
+
+const PASSAGES={
+ kevin:{t:'ケビンさんの毎日',h:`わたしは、UWIの学生です。毎朝、6時半に起きます。起きたら、すぐにシャワーをあびます。そして、ラジオを聞きながら、朝ごはんを食べます。7時半にうちを出ます。バスで大学に行きます。大学まで、40分くらいです。<br>授業は、たいてい9時に始まって、3時に終わります。月曜日と水曜日は、午前中だけ授業があります。午後は、図書館に行ったり、研究室で実験をしたりします。<br>授業がないときは、カフェではたらきます。うちに帰ったら、手を洗って、晩ごはんを作ります。晩ごはんを食べてから、2時間くらい勉強します。そして、11時ごろに寝ます。<br>来週、大きい発表があります。でも、まだ準備をしていません。友だちは「早く準備したほうがいいよ」と言いました。`},
+ storm:{t:'ハリケーンのとき',h:`ジャマイカは、6月から11月まで、ハリケーンのきせつです。ハリケーンが来るときは、とても強い風が吹いて、たくさん雨が降ります。ですから、天気予報をよく見たほうがいいです。<br>そして、水やかんづめを買ったり、でんちを準備したりしたほうがいいです。ハリケーンの時には、外に出ないほうがいいです。車や自転車にも乗らないほうがいいです。窓は、ぜんぶしめてください。<br>ハリケーンが終わったら、すぐに外に出ないでください。道に木や水があって、あぶないです。`}
+};
+PASSAGES.snow={t:'日本のさむい日 (mock-up)',h:`日本には冬があります。冬はとてもさむいです。ときどき、ゆきがふったり、つめたい風がふいたり、します。さむいときは、あたたかい飲み物を飲んだほうがいいです。それから、マフラーやてぶくろをして、外にいったほうがいいですよ。そして、くうきがかんそうしますから、家に帰ってから、うがいをして、手をあらったほうがいいです。ゆきのときは、ふつうのくつをはかないほうがいいです。あぶないですから。車も乗らないほうがいいです。雪のときはときどき、電車やバスもうごいていません*。よくニュースを見てから、でかけたほうがいいです。<br><small>*うごきます = to move</small>`};
+const READING=[
+ {ps:'snow',jp:'さむい日につめたい食べ物を食べたほうがいいです。',p:'〇 or ×?',c:['×','〇'],a:0,e:'× — the passage says to drink warm drinks (あたたかい飲み物).',fixed:true},
+ {ps:'snow',jp:'ゆきのときに、ふつうのくつをはかないほうがいいです。',p:'〇 or ×?',c:['〇','×'],a:0,e:'〇 — ふつうのくつをはかないほうがいいです。あぶないですから。',fixed:true},
+ {ps:'snow',jp:'ゆきのときは、車に乗ってはいけません。',p:'〇 or ×?',c:['×','〇'],a:0,e:'× — trap. The passage says 乗らないほうがいい (better not), not 乗ってはいけません (must not).',fixed:true},
+ {ps:'snow',jp:'ゆきのときは、バスや電車がときどきうごきません。',p:'〇 or ×?',c:['〇','×'],a:0,e:'〇 — ときどき、電車やバスもうごいていません。',fixed:true},
+ {ps:'snow',jp:'どうしてさむいときに、うがいをしたり、手をあらったりしたほうがいいですか。',c:['くうきがかんそうしますから','ゆきがふりますから','あぶないですから','電車がうごきませんから'],a:0,e:'くうきがかんそうしますから (because the air gets dry).'},
+ {ps:'snow',jp:'What should you do before going out on a snowy day?',c:['Watch the news first','Wear normal shoes','Take the car','Drink something cold'],a:0,e:'よくニュースを見てから、でかけたほうがいいです。'},
+ {ps:'kevin',jp:'起きたら、すぐに何をしますか。',c:['シャワーをあびます','朝ごはんを食べます','ラジオを聞きます','うちを出ます'],a:0,e:'起きたら、すぐにシャワーをあびます。'},
+ {ps:'kevin',jp:'朝ごはんを食べながら、何をしますか。',c:['ラジオを聞きます','テレビを見ます','新聞を読みます','友だちと話します'],a:0,e:'ラジオを聞きながら、朝ごはんを食べます。'},
+ {ps:'kevin',jp:'How does Kevin get to UWI, and how long does it take?',c:['By bus, about 40 minutes','By bicycle, about 10 minutes','By bus, about 7:30','By train, about 40 minutes'],a:0,e:'バスで大学に行きます。大学まで、40分くらいです。'},
+ {ps:'kevin',jp:'月曜日と水曜日は、どうですか。',c:['午前中だけ授業があります','授業がありません','3時から授業があります','カフェではたらきます'],a:0,e:'だけ = only: classes only in the morning.'},
+ {ps:'kevin',jp:'When does Kevin work at the café?',c:['When he has no classes','After dinner','Every afternoon','On Monday and Wednesday'],a:0,e:'授業がないときは、カフェではたらきます。'},
+ {ps:'kevin',jp:'晩ごはんを食べてから、何をしますか。',c:['2時間くらい勉強します','手を洗います','寝ます','晩ごはんを作ります'],a:0,e:'てから = after: 晩ごはんを食べてから、2時間くらい勉強します。'},
+ {ps:'kevin',jp:'What advice did his friend give?',c:['Prepare early','Don\'t present','Sleep early','Go to the library'],a:0,e:'早く準備したほうがいいよ = You should prepare early.'},
+ {ps:'kevin',jp:'Which is TRUE?',c:['Kevin goes to the library or does experiments in the afternoon.','Kevin brushes his teeth right after waking.','Kevin has finished preparing his presentation.','Kevin goes to bed around 12.'],a:0,e:'午後は、図書館に行ったり、研究室で実験をしたりします。'},
+ {ps:'storm',jp:'ハリケーンのきせつは、いつですか。',c:['6月から11月まで','11月から6月まで','6月と11月だけ','毎月'],a:0,e:'6月から11月まで。'},
+ {ps:'storm',jp:'Which is NOT advised before the hurricane?',c:['Ride your bicycle to the shop','Watch the weather forecast','Buy water and canned food','Prepare batteries'],a:0,e:'車や自転車にも乗らないほうがいいです。'},
+ {ps:'storm',jp:'ハリケーンが終わったら、どうしますか。',c:['すぐに外に出ません','すぐに外に出ます','窓をあけます','天気予報を見ません'],a:0,e:'すぐに外に出ないでください = Please don\'t go out right away.'},
+ {ps:'storm',jp:'Why is it dangerous after the storm?',c:['There are trees and water on the roads','The wind is still strong','Shops are closed','It\'s dark'],a:0,e:'道に木や水があって、あぶないです。'},
+];
+
+const WRITING=[
+ {p:'Combine with 〜たり〜たりします (Saturday).',jp:'映画を見ます ／ 買い物をします',m:['土曜日、映画を見たり、買い物をしたりします。'],chk:['Both verbs in たり form','Ends with します']},
+ {p:'Combine with 〜たら ("as soon as").',jp:'うちに帰ります ／ すぐに手を洗います',m:['うちに帰ったら、すぐに手を洗います。']},
+ {p:'Combine with 〜てから.',jp:'宿題をします ／ テレビを見ます',m:['宿題をしてから、テレビを見ます。']},
+ {p:'Combine with 〜ながら. The main action is running.',jp:'音楽を聞きます ／ 走ります',m:['音楽を聞きながら、走ります。'],chk:['Main action (走ります) is last']},
+ {p:'Join in order with 〜て、〜て.',jp:'起きます → シャワーをあびます → 朝ごはんを食べます',m:['起きて、シャワーをあびて、朝ごはんを食べます。']},
+ {p:'Your friend caught a cold. Give one "should" and one "shouldn\'t".',jp:'友だちがかぜをひきました。',m:['薬を飲んだほうがいいですよ。','お風呂に入らないほうがいいですよ。'],chk:['た form + ほうがいい','ない form + ほうがいい']},
+ {p:'A Japanese test is next week. Advise a classmate politely.',jp:'来週、日本語のテストがあります。',m:['毎日漢字を書いたほうがいいと思います。','教科書を読んだり、CDを聞いたりしたほうがいいと思います。'],chk:['〜と思います to soften']},
+ {p:'A hurricane is coming. Write two pieces of advice.',jp:'来週、ジャマイカにハリケーンが来ます。',m:['かんづめや水を買ったほうがいいです。','外に出ないほうがいいです。','窓をしめたほうがいいです。']},
+ {p:'Translate.',jp:'"If I have time, I\'ll read a book."',m:['時間があったら、本を読みます。']},
+ {p:'Translate.',jp:'"If I were a cat, I\'d want to sleep every day."',m:['もし、ねこだったら、毎日寝たいです。'],chk:['Noun + だったら']},
+ {p:'Translate.',jp:'"If it\'s not expensive, I\'ll buy it."',m:['高くなかったら、買います。'],chk:['い-adj negative: くなかったら']},
+ {p:'Answer in Japanese.',jp:'起きたら、何をしますか。',m:['起きたら、すぐに歯をみがきます。']},
+ {p:'Answer in Japanese with 〜たり〜たり (past).',jp:'週末、何をしましたか。',m:['週末、友だちに会ったり、そうじをしたりしました。'],chk:['Ends with しました']},
+ {p:'Answer in Japanese.',jp:'何をしながら、勉強しますか。',m:['音楽を聞きながら、勉強します。']},
+ {p:'Answer in Japanese with 〜てから.',jp:'授業のあと、何をしますか。',m:['図書館で勉強してから、うちに帰ります。']},
+ {p:'Mock IV ① style: fill each blank with a different verb.',jp:'うちに帰ったら、＿＿たり、＿＿たりします。それから、＿＿ながら、＿＿ます。',m:['うちに帰ったら、テレビを見たり、ごはんを食べたりします。','それから、音楽を聞きながら、宿題をします。'],chk:['たり, たり then します','ながら uses the ます stem (聞き)','Four different verbs']},
+ {p:'Mock IV ② style: use 〜て、〜て with a different verb each time.',jp:'週末、雨がふったら、なにをしますか。',m:['週末、雨がふったら、うちで本を読んで、ゲームをして、寝ます。'],chk:['Starts with 雨がふったら','て, て, then a final ます verb']},
+ {p:'Mock IV ③ style: use 〜てから.',jp:'きのう、ひるごはんのあと、何をしましたか。',m:['きのう、ひるごはんを食べてから、図書館に行きました。'],chk:['て form + から','Past tense at the end (〜ました)']},
+ {p:'Mock V 3) style: give two pieces of advice.',jp:'ジャマイカで教室がさむいとき、どうしたらいいですか。',m:['セーターを着たほうがいいです。','あたたかい飲み物を飲んだほうがいいです。','エアコンをつけないほうがいいです。'],chk:['た form + ほうがいい / ない form + ほうがいい']},
+ {p:'Essay (mock-up Section V). At least 5 sentences, give your reason.',jp:'もし、たくさんお金があったら、あなたはどこに旅行に行きたいですか。',essay:true,
+  m:['もし、たくさんお金があったら、日本に旅行に行きたいです。','日本のアニメが大好きですから、秋葉原に行きたいです。','それから、京都でお寺を見たり、おいしいラーメンを食べたりしたいです。','日本に行ったら、日本人の友だちを作りたいです。','そして、たくさん日本語で話したいです。','日本語が上手になったら、日本ではたらきたいです。'],
+  chk:['Opens with もし、〜たら','Uses 〜たい (want to)','Gives a reason with 〜から','Uses 〜たり〜たり at least once','At least 5 sentences','Uses Unit 12–13 kanji where you can (天気, 早く, 乗ります…)']},
+];
+
+/* ---------- question builders ---------- */
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=(a,n)=>shuffle(a).slice(0,n);
+function mcFrom(o){const order=shuffle(o.c.map((t,i)=>i));return{...o,choices:order.map(i=>o.c[i]),ans:order.indexOf(o.a)};}
+
+function kanjiQs(){
+  const out=[];
+  KANJI.forEach(([w,r,m,u,d,note])=>{
+    out.push({type:'fill',cat:'Kanji',prompt:`Type the reading · ${m}`,jp:w,accept:r,show:r[0],e:note||`${w} = ${r[0]} (${m}).`});
+    if(d.length===3) out.push(mcFrom({type:'mc',cat:'Kanji',prompt:`Pick the kanji for「${r[0]}」(${m})`,jp:r[0],c:[w,...d],a:0,e:note||`${r[0]} = ${w}.`}));
+  });
+  return out;
+}
+const WEIGHT_FORMS=['te','ta','tari','tara','nakattara','nagara','tekara','hou','naihou','dict','nai'];
+function formQ(v,f){
+  const kana=conj(v,f), kj=kanjiOf(v,kana), acc=[kana]; if(kj)acc.push(kj);
+  if(f==='hou'||f==='naihou'){acc.push(kana+'です'); if(kj)acc.push(kj+'です');}
+  const label=v.label||(v.kj?kanjiOf(v,v.masu):v.masu);
+  const reading=v.label||v.kj?`（${v.masu}）`:'';
+  return {type:'fill',cat:'Forms',prompt:`Change to the ${FORMS[f].lab} · "${v.en}"`,jp:`${label}${reading}`,accept:acc,show:kj?`${kana}（${kj}）`:kana,e:(v.trap?v.trap+' ':'')+RULE[v.g]};
+}
+const PART={te:1,tari:1,tara:1,nagara:1,hou:1,naihou:1};
+function partQ(v,f){
+  const full=conj(v,f);let blank,suf;
+  if(f==='te'){blank=full.slice(0,-1);suf=full.slice(-1)}
+  else if(f==='tari'||f==='tara'){blank=full.slice(0,-1);suf=full.slice(-1)}
+  else if(f==='nagara'){blank=full.slice(0,-3);suf='ながら'}
+  else {blank=full.replace(/ほうがいい$/,'');suf='ほうがいいです'}
+  const acc=[blank,full];const kb=kanjiOf(v,blank),kf=kanjiOf(v,full);if(kb)acc.push(kb,kf);
+  const label=v.label||(v.kj?kanjiOf(v,v.masu):v.masu);
+  return {type:'fill',cat:'Forms',prompt:`Mock III style: fill only the blank · "${v.en}"`,jp:`（${label} → <span class="blank">　</span>）${suf}`,accept:acc,show:kb?`${blank}（${kb}）${suf}`:blank+suf,e:(v.trap?v.trap+' ':'')+'Write only what goes before the printed ending. '+RULE[v.g]};
+}
+function formQs(n){
+  const out=[],seen=new Set();
+  const tricky=VERBS.filter(v=>v.trap);
+  while(out.length<n){
+    const v=Math.random()<.4?tricky[Math.random()*tricky.length|0]:VERBS[Math.random()*VERBS.length|0];
+    const f=WEIGHT_FORMS[Math.random()*WEIGHT_FORMS.length|0];
+    const k=v.masu+v.g+f; if(seen.has(k))continue; seen.add(k); out.push(PART[f]&&Math.random()<.45?partQ(v,f):formQ(v,f));
+  }
+  return out;
+}
+function grammarQs(){return GRAMMAR.map(g=>mcFrom({type:'mc',cat:'Grammar',prompt:g.p,jp:g.jp,c:g.c,a:g.a,e:g.e}))}
+function particleQs(){
+  return PARTICLES.map(([s,a,h])=>{
+    const acc=[];a.forEach(x=>{acc.push(x);acc.push(x.replace(/は$/,'わ').replace(/^を$/,'お').replace(/^へ$/,'え'))});
+    return {type:'fill',cat:'Particles',prompt:`Type the particle · hint: ${h}`,jp:s,accept:[...new Set(acc)],show:a.join(' / '),e:`${a[0]} — ${h}.`};
+  });
+}
+function readingQs(){return READING.map(r=>{const o={type:'mc',cat:'Reading',prompt:r.p||'Read the passage, then answer.',jp:r.jp,c:r.c,a:r.a,e:r.e,ps:r.ps};
+  if(r.fixed){const c=['〇','×'];return {...o,choices:c,ans:c.indexOf(r.c[r.a])}} return mcFrom(o)})}
+function writingQs(){return WRITING.map(w=>({type:'self',cat:'Writing',prompt:w.p,jp:w.jp,model:w.m,chk:w.chk,essay:w.essay}))}
+
+function paperQs(){
+ const F=(cat,prompt,jp,accept,show,e,particle)=>{let acc=accept;if(particle){acc=[];accept.forEach(x=>{acc.push(x,x.replace(/^は$/,'わ').replace(/^を$/,'お').replace(/^へ$/,'え'))})}
+   return {type:'fill',cat,prompt,jp,accept:[...new Set(acc)],show,e}};
+ const M=(cat,prompt,jp,c,e)=>mcFrom({type:'mc',cat,prompt,jp,c,a:0,e});
+ const B='<span class="blank">　</span>';
+ const I='I · Kanji',II='II · Particles',III='III · Verb forms',IV='IV · Write',V='V · Reading',VI='VI · Essay';
+ const q=[
+  F(I,'Write the reading in hiragana','窓',['まど'],'まど','窓 = window.'),
+  F(I,'Write the reading in hiragana','準備',['じゅんび'],'じゅんび','準備 = preparation.'),
+  F(I,'Write the reading in hiragana','発表',['はっぴょう'],'はっぴょう','Small っ and ぴ: はっぴょう.'),
+  F(I,'Write the hiragana for the kanji part only',`遅（${B}）い`,['おそ','おそい'],'おそ（い）','遅い = late.'),
+  F(I,'Write the hiragana for the kanji part only',`着（${B}）きます`,['つ','つきます'],'つ（きます）','着きます = arrive. Careful: 着ます (wear) is きます.'),
+  F(I,'Write the reading in hiragana','洗濯',['せんたく'],'せんたく','洗濯 = laundry.'),
+  M(I,'Write in kanji: pick the correct one','じゅぎょう',['授業','受業','授棠','投業'],'授 has 扌 (hand) on the left.'),
+  M(I,'Write in kanji: pick the correct one','はや（　）い',['早','草','旱','卓'],'早い = early.'),
+  F(II,'Particle for the blank',`① うち${B}帰ったら、手（を）洗います。`,['に','へ'],'に (へ also OK)','Return to a place: に／へ.',true),
+  F(II,'Particle for the blank',`① うち（に）帰ったら、手${B}洗います。`,['を'],'を','Object of 洗います.',true),
+  F(II,'Particle for the blank',`② わたしは、友だち${B}バス（に）乗って、学校（に）行きます。`,['と'],'と','With a person: と.',true),
+  F(II,'Particle for the blank',`② わたしは、友だち（と）バス${B}乗って、学校（に）行きます。`,['に'],'に','乗ります takes に, never を.',true),
+  F(II,'Particle for the blank',`② わたしは、友だち（と）バス（に）乗って、学校${B}行きます。`,['に','へ'],'に (へ also OK)','Destination.',true),
+  F(II,'Particle for the blank',`③ 自分${B}ばんごはんを作ります。`,['で'],'で','自分で = by myself.',true),
+  F(II,'Particle for the blank',`④ かぜ${B}ときは、うがい（を）してください。`,['の'],'の','Noun + の + とき.',true),
+  F(II,'Particle for the blank',`④ かぜ（の）ときは、うがい${B}してください。`,['を'],'を','うがいをします.',true),
+  F(II,'Particle for the blank',`⑤ よく、リガニー${B}買い物をします。`,['で'],'で','Place where an action happens: で.',true),
+  F(II,'Particle for the blank',`⑥ わたしはやさい${B}あまりすきじゃありません。`,['が','は'],'が (は also OK)','すき marks its object with が; は works for contrast in a negative.',true),
+  F(II,'Particle for the blank',`⑦ わたしのあにはJPS${B}つとめています。`,['に'],'に','つとめる (be employed at) takes に.',true),
+  F(II,'Particle for the blank',`⑧ わたしのあねはDigicel${B}はたらいています。`,['で'],'で','はたらく (work at) takes で. Compare ⑦.',true),
+  F(II,'Particle for the blank',`⑨ ブルーマウンテン${B}のぼったことがありますか。`,['に'],'に','Climb to the top: に.',true),
+  F(III,'Fill only the blank',`① かぜのときは、うちで（休みます → ${B}）ほうがいいですよ。`,['やすんだ','休んだ'],'休んだ（やすんだ）','Advice: た form + ほうがいい.'),
+  F(III,'Fill only the blank',`それから、そとで（遊びません → ${B}）ほうがいいですよ。`,['あそばない','遊ばない'],'遊ばない（あそばない）','Negative advice: ない form + ほうがいい.'),
+  F(III,'Fill only the blank',`② こうえんに（行きます → ${B}）て、本を（読みます→　）り、さんぽ（します→　）りします。`,['いっ','行っ','いって','行って'],'行っ（いっ）て','行く exception: いって.'),
+  F(III,'Fill only the blank',`② こうえんに（行きます→　）て、本を（読みます → ${B}）り、さんぽ（します→　）りします。`,['よんだ','読んだ','よんだり','読んだり'],'読んだ（よんだ）り','み → んだ.'),
+  F(III,'Fill only the blank',`② …本を（読みます→　）り、さんぽ（します → ${B}）りします。`,['した','したり'],'した り','する → した → したり.'),
+  F(III,'Fill only the blank',`③ あさ（起きます → ${B}）ら、はを（みがきます→　）て、シャワーを（あびます→　）て、でかけます。`,['おきた','起きた','おきたら','起きたら'],'起きた（おきた）ら','Group 2: 起きる → 起きた.'),
+  F(III,'Fill only the blank',`③ あさ（起きます→　）ら、はを（みがきます → ${B}）て、シャワーを（あびます→　）て、でかけます。`,['みがい','みがいて'],'みがい て','き → いて.'),
+  F(III,'Fill only the blank',`③ …はを（みがきます→　）て、シャワーを（あびます → ${B}）て、でかけます。`,['あび','あびて'],'あび て','あびる is Group 2: あびて (not あんで).'),
+  F(III,'Fill only the blank',`④ わたしは、音楽を（聞きます → ${B}）ながら、走ります。`,['きき','聞き','ききながら','聞きながら'],'聞き（きき）ながら','ます stem + ながら.'),
+  F(III,'Fill only the blank',`⑤ スマホを（見ます → ${B}）ながら、車のうんてんをしないでください。`,['み','見','みながら','見ながら'],'見（み）ながら','見ます → 見ながら.'),
+ ];
+ WRITING.filter(w=>/^Mock IV/.test(w.p)).forEach(w=>q.push({type:'self',cat:IV,prompt:w.p.replace(/^Mock IV . style: /,''),jp:w.jp,model:w.m,chk:w.chk}));
+ READING.filter(r=>r.ps==='snow').slice(0,4).forEach(r=>{q.push({type:'mc',cat:V,prompt:'1) 〇 or ×?',jp:r.jp,choices:['〇','×'],ans:['〇','×'].indexOf(r.c[r.a]),e:r.e,ps:'snow'})});
+ q.push({type:'self',cat:V,prompt:'2) Answer in Japanese.',jp:'どうしてさむいときに、うがいをしたり、手をあらったほうがいいですか。',model:['くうきがかんそうしますから。'],chk:['Answer "why" with 〜から'],ps:'snow'});
+ const adv=WRITING.find(w=>/^Mock V 3/.test(w.p));q.push({type:'self',cat:V,prompt:'3) Give two pieces of advice.',jp:adv.jp,model:adv.m,chk:adv.chk,ps:'snow'});
+ const es=WRITING.find(w=>w.essay);q.push({type:'self',cat:VI,prompt:es.p.replace('(mock-up Section V)','(mock-up last section)'),jp:es.jp,model:es.m,chk:es.chk,essay:true});
+ return q;
+}
+const SECTIONS=[
+ {id:'paper',k:'模試',en:'Oct 2 mock-up',build:()=>paperQs()},
+ {id:'mock',k:'総合',en:'Random mix',build:()=>shuffle([...pick(kanjiQs(),10),...formQs(6),...pick(grammarQs(),8),...pick(particleQs(),6)]).concat(pick(readingQs(),4))},
+ {id:'kanji',k:'漢字',en:'Kanji',build:()=>shuffle(kanjiQs()).slice(0,30)},
+ {id:'forms',k:'活用',en:'Verb forms',build:()=>formQs(25)},
+ {id:'grammar',k:'文法',en:'Grammar',build:()=>shuffle(grammarQs())},
+ {id:'particles',k:'助詞',en:'Particles',build:()=>shuffle(particleQs())},
+ {id:'reading',k:'読解',en:'Reading',build:()=>readingQs()},
+ {id:'writing',k:'作文',en:'Write it',build:()=>writingQs()},
+];
+
+/* ---------- app ---------- */
+const $=s=>document.querySelector(s);
+let S={sec:'mock',deck:[],i:0,res:[],answered:false};
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+function renderNav(){
+  $('#nav').innerHTML=SECTIONS.map(s=>{const best=store.get('best_'+s.id);
+    return `<button type="button" data-s="${s.id}" aria-pressed="${s.id===S.sec}"><span class="k">${s.k}</span><span>${s.en}</span>${best!=null&&s.id!=='writing'?`<span style="opacity:.7;font-size:.75rem">${best}%</span>`:''}</button>`}).join('');
+  $('#nav').querySelectorAll('button').forEach(b=>b.onclick=()=>start(b.dataset.s));
+}
+function start(sec,deck){
+  S={sec,deck:deck||SECTIONS.find(s=>s.id===sec).build(),i:0,res:[],answered:false};
+  try{history.replaceState(null,'','#'+sec)}catch(e){}
+  renderNav();render();
+}
+function renderBoxes(){
+  $('#boxes').innerHTML=S.deck.map((q,i)=>{const r=S.res[i];const cls=i===S.i&&!r?'cur':r&&!r.ok?'bad':'';
+    return `<span class="${cls}">${r?(r.ok?'◯':'✕'):''}</span>`}).join('');
+  const done=S.res.filter(Boolean).length,ok=S.res.filter(r=>r&&r.ok).length;
+  $('#metaL').textContent=`Question ${Math.min(S.i+1,S.deck.length)} of ${S.deck.length}`;
+  $('#metaR').textContent=done?`${ok} / ${done} correct`:'';
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function render(){
+  renderBoxes();
+  if(S.i>=S.deck.length)return renderResults();
+  const q=S.deck[S.i];S.answered=false;
+  let h=`<section class="card" aria-live="polite"><div class="cat">${q.cat}</div>`;
+  if(q.ps){const P=PASSAGES[q.ps];h+=`<details class="pass" open><summary>${P.t} (passage)</summary><div class="passage"><h3>${P.t}</h3>${P.h}</div></details>`}
+  if(q.prompt)h+=`<p class="prompt">${esc(q.prompt)}</p>`;
+  h+=`<div class="jp-big">${q.jp}</div>`;
+  if(q.type==='mc'){
+    h+=`<div class="choices">${q.choices.map((c,i)=>`<button type="button" class="choice" data-i="${i}"><span class="n">${i+1}</span><span class="t">${esc(c)}</span></button>`).join('')}</div>`;
+  }else if(q.type==='fill'){
+    h+=`<form class="field" id="ff" autocomplete="off"><input id="ans" type="text" placeholder="hiragana or romaji" autocapitalize="off" spellcheck="false" lang="ja" aria-label="Your answer"><button class="btn" type="submit">Check</button></form><div class="preview" id="pv"></div>`;
+  }else{
+    h+=`<textarea id="ans-${S.i}" placeholder="${q.essay?'Write at least 5 sentences…':'Write your answer (kana, kanji or romaji)…'}" aria-label="Your answer"></textarea><div class="preview" id="pv"></div>
+    <div class="row"><button class="btn" type="button" id="reveal">Show model answer</button><button class="btn ghost" type="button" id="skip">Skip</button></div>`;
+  }
+  h+=`<div id="fb"></div><div class="kbd">${q.type==='mc'?'Keys 1–4 to choose · Enter for next':q.type==='fill'?'Enter to check · Enter again for next':'Compare with the model, then mark yourself'}</div></section>`;
+  $('#stage').innerHTML=h;
+  if(q.type==='mc')$('#stage').querySelectorAll('.choice').forEach(b=>b.onclick=()=>answerMC(+b.dataset.i));
+  if(q.type==='fill'){const inp=$('#ans');inp.focus({preventScroll:true});
+    inp.oninput=()=>{const k=kata2hira(toKana(inp.value));$('#pv').innerHTML=inp.value&&/[a-z]/i.test(inp.value)?`reads as <b>${esc(k)}</b>`:''};
+    $('#ff').onsubmit=e=>{e.preventDefault();if(S.answered)return next();answerFill(inp.value)};}
+  if(q.type==='self'){const ta=$('#stage textarea');
+    ta.oninput=()=>{$('#pv').innerHTML=/[a-z]/i.test(ta.value)?`reads as <b>${esc(kata2hira(toKana(ta.value)))}</b>`:''};
+    $('#reveal').onclick=()=>revealSelf();$('#skip').onclick=()=>{S.res[S.i]={ok:false,q,given:'(skipped)'};next()};}
+}
+function feedback(kind,q,extra){
+  const stamp=kind==='right'?'<div class="stamp">◯</div>':kind==='near'?'<div class="stamp near">惜</div>':'<div class="stamp x">✕</div>';
+  const verdict=kind==='right'?'正解 · Correct':kind==='near'?'Almost · counts as wrong':'Not quite';
+  $('#fb').innerHTML=`<div class="fb">${stamp}<div class="verdict">${verdict}</div><div class="ans">${esc(q.show??q.choices[q.ans])}</div><div class="exp">${esc(q.e||'')}${extra||''}</div></div>
+   <div class="row"><button class="btn" type="button" id="nx">${S.i+1<S.deck.length?'Next':'See results'}</button></div>`;
+  $('#nx').onclick=next;$('#nx').focus({preventScroll:true});
+}
+function answerMC(i){
+  if(S.answered)return;S.answered=true;const q=S.deck[S.i];const ok=i===q.ans;
+  S.res[S.i]={ok,q,given:q.choices[i]};
+  $('#stage').querySelectorAll('.choice').forEach((b,j)=>{b.disabled=true;if(j===q.ans)b.classList.add('right');else if(j===i)b.classList.add('wrong')});
+  feedback(ok?'right':'wrong',q);renderBoxes();
+}
+function answerFill(v){
+  const q=S.deck[S.i];const r=check(v,q.accept);
+  if(r==='empty'){$('#pv').innerHTML='Type an answer first, or press Check again on an empty box to skip.';if(!S.emptyOnce){S.emptyOnce=true;return}}
+  S.emptyOnce=false;S.answered=true;const ok=r==='right';
+  S.res[S.i]={ok,q,given:v?kata2hira(toKana(v)):'(blank)'};
+  $('#ans').readOnly=true;
+  const near=r==='near'?`<div class="nearnote">You wrote <b>${esc(norm(v))}</b>. Check the small っ, long vowels (う), small ゃゅょ and ゛゜ marks.</div>`:'';
+  feedback(r==='right'?'right':r==='near'?'near':'wrong',q,near);renderBoxes();
+}
+function revealSelf(){
+  const q=S.deck[S.i];if(S.answered)return;S.answered=true;
+  $('#reveal').disabled=true;$('#skip').hidden=true;
+  $('#fb').innerHTML=`<div class="model">${q.model.map(esc).join('<br>')}</div>${q.chk?`<ul class="check">${q.chk.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>`:''}
+  <p class="prompt" style="margin-top:12px">Other correct answers exist. Mark yourself on grammar and form, not word choice.</p>
+  <div class="row"><button class="btn shu" type="button" id="got">◯ I got it</button><button class="btn ghost" type="button" id="miss">✕ I missed something</button></div>`;
+  const mark=ok=>{S.res[S.i]={ok,q,given:$('#stage textarea').value||'(blank)'};next()};
+  $('#got').onclick=()=>mark(true);$('#miss').onclick=()=>mark(false);
+}
+function next(){S.i++;render();window.scrollTo({top:0,behavior:'smooth'})}
+function renderResults(){
+  const tot=S.deck.length,ok=S.res.filter(r=>r&&r.ok).length,pct=Math.round(ok/tot*100);
+  const prev=store.get('best_'+S.sec);if(prev==null||pct>prev)store.set('best_'+S.sec,pct);renderNav();
+  const cats={};S.res.forEach(r=>{if(!r)return;const c=r.q.cat;cats[c]=cats[c]||[0,0];cats[c][1]++;if(r.ok)cats[c][0]++});
+  const missed=S.res.filter(r=>r&&!r.ok);
+  $('#metaL').textContent='Finished';
+  $('#stage').innerHTML=`<section class="card results"><div class="cat">結果 · Results</div>
+   <div style="display:flex;gap:18px;align-items:flex-end;flex-wrap:wrap"><div class="score">${pct}<span style="font-size:1.4rem">%</span></div>
+   <div><h2>${ok} of ${tot}</h2><div class="prompt" style="margin:0">${pct>=85?'Ready for tomorrow. Run a fresh set to be sure.':pct>=65?'Close. Retry the missed ones until they stick.':'Go back through the missed answers, then retry.'}</div></div></div>
+   <div class="bycat">${Object.entries(cats).map(([c,[a,b]])=>`<div>${c}<b>${a} / ${b}</b></div>`).join('')}</div>
+   <div class="row"><button class="btn" type="button" id="again">New set</button>${missed.length?`<button class="btn shu" type="button" id="retry">Retry ${missed.length} missed</button>`:''}</div>
+   ${missed.length?`<h3 style="margin:20px 0 0;font-size:1rem">Missed</h3><ul class="missed">${missed.map(r=>`<li><span class="q">${r.q.jp.replace(/（?<span class="blank">　<\/span>）?/g,'（　）')}</span><br>You: ${esc(r.given)} · Answer: <b>${esc(r.q.show??(r.q.choices?r.q.choices[r.q.ans]:r.q.model.join(' ')))}</b></li>`).join('')}</ul>`:''}
+  </section>`;
+  $('#again').onclick=()=>start(S.sec);
+  if(missed.length)$('#retry').onclick=()=>start(S.sec,shuffle(missed.map(r=>r.q.type==='mc'?mcFrom({...r.q,c:r.q.choices,a:r.q.ans}):r.q)));
+}
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='TEXTAREA'||e.target.tagName==='BUTTON')return;
+  const q=S.deck[S.i];if(!q)return;
+  if(q.type==='mc'&&!S.answered&&/^[1-4]$/.test(e.key)&&+e.key<=q.choices.length){answerMC(+e.key-1);e.preventDefault()}
+  else if(S.answered&&e.key==='Enter'&&q.type==='mc'){next();e.preventDefault()}
+});
+const h0=(location.hash||'').slice(1);
+start(SECTIONS.some(s=>s.id===h0)?h0:'paper');
+</script>
+
+</body></html>
